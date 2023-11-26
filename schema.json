@@ -1,0 +1,204 @@
+{
+    "employee": {
+        "regId": {
+            "mandatory": false,
+            "dataType": "str",
+            "length": [
+                0,
+                40
+            ]
+        },
+        "name": {
+            "mandatory": true,
+            "dataType": "str",
+            "length": [
+                0,
+                40
+            ]
+        },
+        "email": {
+            "mandatory": true,
+            "dataType": "str",
+            "length": [
+                0,
+                40
+            ]
+        },
+        "age": {
+            "mandatory": true,
+            "dataType": "int",
+            "range": [
+                10,
+                100
+            ]
+        },
+        "gender": {
+            "mandatory": true,
+            "dataType": "str",
+            "length": [
+                0,
+                40
+            ]
+        },
+        "phoneNo": {
+            "mandatory": true,
+            "dataType": "str",
+            "length": [
+                0,
+                40
+            ]
+        },
+        "addressDetails": {
+            "mandatory": true,
+            "dataType": "dict",
+            "subType": {
+                "hno": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "street": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "city": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "state": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                }
+            }
+        },
+        "workExperience": {
+            "mandatory": true,
+            "dataType": "list",
+            "length": [
+                0,
+                1000
+            ],
+            "subType": {
+                "companyName": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "fromDate": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "toDate": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "address": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                }
+            }
+        },
+        "qualifications": {
+            "mandatory": true,
+            "dataType": "list",
+            "length": [
+                0,
+                1000
+            ],
+            "subType": {
+                "qualificationName": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "percentage": {
+                    "mandatory": true,
+                    "dataType": "float",
+                    "range": [
+                        0.0,
+                        100.0
+                    ]
+                },
+                "fromDate": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "toDate": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                }
+            }
+        },
+        "projects": {
+            "mandatory": true,
+            "dataType": "list",
+            "length": [
+                0,
+                1000
+            ],
+            "subType": {
+                "title": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                },
+                "description": {
+                    "mandatory": true,
+                    "dataType": "str",
+                    "length": [
+                        0,
+                        40
+                    ]
+                }
+            }
+        },
+        "photo": {
+            "mandatory": false,
+            "dataType": "Base64"
+        }
+    }
+}

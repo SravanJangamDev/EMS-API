@@ -1,0 +1,31 @@
+{
+  "name": "xyz",
+  "email": "xyz@gmail.com",
+  "age": 25,
+  "gender": "Female",
+  "phoneNo": "93757923579",
+  "addressDetails": {
+    "hno": "123",
+    "street": "xyz",
+    "city": "xyz",
+    "state": "xyz"
+  },
+  "workExperience": [
+    {
+      "companyName": "xyz",
+      "fromDate": "20-05-2019",
+      "toDate": "20-09-2021",
+      "address": "xyz"
+    }
+  ],
+  "qualifications": [
+    {
+      "qualificationName": "ssc",
+      "fromDate": "20-05-2012",
+      "toDate": "20-05-2013",
+      "percentage": 85.1
+    }
+  ],
+  "projects": [{ "title": "xyz", "description": "description of the project" }],
+  "regId": "EMP0000004"
+}
