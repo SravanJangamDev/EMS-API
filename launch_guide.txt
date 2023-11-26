@@ -1,0 +1,30 @@
+Created CRUD API end points for emplyee using python falcon framework. 
+I have not used any Database(SQL, Mysql, MongoDB) now because of limited time. All the data will be created in files.
+One file will be created for one employee. 
+I have handled all the exceptions and depeloped the application in such a way the we can add more endpoints easily.
+If the requirement is to integrate the databases like SQL, Mysql, please let me know, I will integrate it and send it back.
+
+Main points:
+1. Log messages
+    - added log messages for each request and response
+    - added log message for each error
+
+2. Exceptions
+    - handled all the exceptions and each exception logs the error internally.
+
+3. Middlewares
+    - created req-resp log Middleware
+    - created authentication Middleware
+
+4. User friendly messages and error message
+
+5. Request body validation
+    - length validation
+    - range validation
+    - pattern matching validation
+    - data type validation
+
+
+
+guide to run the app:
+python3 app.py

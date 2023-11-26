@@ -24,6 +24,10 @@ class HandleCORS(object):
 
 
 class LogReqResp(object):
+    """
+    Middleware will logs each and every request.
+    """
+
     def __init__(self):
         reqRespLogFile = os.getenv("REQ_RESP_LOG_FILE", ".req_resp_log.json")
         self.logger = Logger(reqRespLogFile)
@@ -72,6 +76,10 @@ class LogReqResp(object):
 
 # ***************** Authentication middleware **********************
 class Authenticate(object):
+    """
+    Authentication middleware. Not implemented.
+    """
+
     def process_request(self, req: falcon.Request, resp: falcon.Response) -> None:
         pass
 

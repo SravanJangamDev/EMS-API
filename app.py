@@ -34,6 +34,15 @@ def readSchemaFile(filename: str) -> dict:
 
 
 def validateReqBody(schema: dict, reqBody: dict, checkMandatroy: bool = False) -> None:
+    """
+    Validates request body:
+    possible validations:
+    1. data type
+    2. string length
+    3. integer range
+    4. pattern matching(emails)
+    ...
+    """
     error_msg = []
     if checkMandatroy:
         mandatoryAttrs = [attr for attr, val in schema.items() if val.get("mandatory")]
@@ -68,6 +77,9 @@ def validateReqBody(schema: dict, reqBody: dict, checkMandatroy: bool = False) -
 
 
 def createEmpID() -> str:
+    """
+    creates New employee ID for employee creation.
+    """
     global lastEmpID
 
     count = int(lastEmpID.replace("EMP", "")) + 1
@@ -76,6 +88,9 @@ def createEmpID() -> str:
 
 
 def isDuplicate(email: str) -> bool:
+    """
+    checks for duplicate email ID.
+    """
     global employees
     for _, emp in employees.items():
         if emp.get("email") == email:
@@ -85,6 +100,9 @@ def isDuplicate(email: str) -> bool:
 
 
 def initialSetup() -> None:
+    """
+    create initial setups like db connection, ..etc.
+    """
     global DB
     global employees
     global schema
@@ -241,6 +259,7 @@ class EmployeeResource:
         resp.body = json.dumps(data)
 
 
+# Create Initial setups
 initialSetup()
 
 app = falcon.App(middleware=[LogReqResp(), Authenticate(), HandleCORS()])
