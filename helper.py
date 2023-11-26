@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from typing import Optional
 import sys
+from sqlite3 import Cursor, connect
 
 
 class Logger(object):
@@ -123,6 +124,105 @@ class InternalException(Exception):
             return f"InternalException: {self.msg}"
 
 
+# ************** queries ************************
+createEmployeeTableQuery = """
+    CREATE TABLE IF NOT EXISTS Employee (
+        regId TEXT PRIMARY KEY,
+        name TEXT,
+        email TEXT,
+        age INTEGER,
+        gender TEXT,
+        phoneNo TEXT,
+        addressDetails JSON,
+        workExperience JSON,
+        qualifications JSON,
+        projects JSON
+    );
+"""
+
+insertIntoEmployeeQuery = """
+    INSERT INTO Employee (regId, name, email, age, gender, phoneNo, addressDetails, workExperience, qualifications, projects) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+"""
+
+updateEmployeeQuery = """
+    UPDATE Employee SET ? WHERE regId = ?;
+"""
+
+selectAllEmployeesQuery = """
+    SELECT regId, name, email, age, gender, phoneNo, JSON_PRETTY(addressDetails) as addressDetails, JSON_PRETTY(workExperience) as workExperience, JSON_PRETTY(qualifications) as qualifications, JSON_PRETTY(projects) as projects FROM Employee';
+"""
+
+selectOneEmployeeQuery = """
+    SELECT regId, name, email, age, gender, phoneNo, JSON_PRETTY(addressDetails) as addressDetails, JSON_PRETTY(workExperience) as workExperience, JSON_PRETTY(qualifications) as qualifications, JSON_PRETTY(projects) as projects FROM Employee Where regID=?;'
+"""
+deleteEmployeeQuery = """
+    DELETE FROM Employee WHERE regId = ?;
+"""
+
+
+class SQLITEDB(object):
+    def __init__(self, dbname: str = "employee.db"):
+        self.dbname = dbname
+        try:
+            connection = connect(dbname)
+            self.connection = connection
+            self.cursor = connection.cursor()
+
+        except Exception as e:
+            raise InternalException("DB connection Failed", excp=e)
+
+    def execute_sql_query(self, query: str, params: tuple = ()) -> Cursor:
+        try:
+            cursor = self.cursor.execute(query, params)
+            self.connection.commit()
+            return cursor
+        except Exception as e:
+            raise ClientException(f"Command Failed. {e}", excp=e)
+
+    def __del__(self) -> None:
+        try:
+            self.connection.commit()
+            self.connection.close()
+        except Exception as e:
+            raise ClientException(f"Command Failed. {e}", excp=e)
+
+
+class Database(object):
+    def __init__(self, dbDir: str = "employee.db"):
+        self.db = SQLITEDB(dbDir)
+
+    def insertRecord(self, table: str, filename: str, data: dict) -> None:
+        if isFileExists(f"{self.dbDir}/{table}", filename):
+            raise ClientException(f"{table.capitalize()} {filename} already exists.")
+
+        createFile(f"{self.dbDir}/{table}", filename, data)
+
+    def updateRecord(self, table: str, filename: str, data: dict) -> None:
+        if isFileNotExists(f"{self.dbDir}/{table}", filename):
+            raise ClientException(f"{table.capitalize()} {filename} not found.")
+
+        prevData = readFile(f"{self.dbDir}/{table}", filename)
+        updatedData = {**prevData, **data}
+        updateFile(f"{self.dbDir}/{table}", filename, updatedData)
+
+    def deleteRecord(self, table: str, filename: str) -> None:
+        if isFileNotExists(f"{self.dbDir}/{table}", filename):
+            raise ClientException(f"{table.capitalize()} {filename} not found.")
+
+        deleteFile(f"{self.dbDir}/{table}", filename)
+
+    def getRecord(self, table: str, filename: str) -> dict:
+        if isFileNotExists(f"{self.dbDir}/{table}", filename):
+            raise ClientException(f"{table.capitalize()} {filename} not found.")
+
+        data = readFile(f"{self.dbDir}/{table}", filename)
+        return data
+
+    def getAllRecords(self, table: str) -> list:
+        data = readFolder(f"{self.dbDir}/{table}", fileContent=True)
+        return data
+
+
 def createFile(folder: str, filename: str, data: dict) -> None:
     try:
         if not os.path.exists(folder):
@@ -186,46 +286,3 @@ def readFolder(folder: str, fileContent: bool = True) -> list:
         filesData.append(readFile(folder, filename))
 
     return filesData
-
-
-class Database(object):
-    def __init__(self, dbDir: str = "."):
-        try:
-            if not os.path.exists(dbDir):
-                os.makedirs(dbDir)
-
-        except Exception as e:
-            raise InternalException("DataBase connection failed.", excp=e)
-
-        self.dbDir = dbDir
-
-    def insertRecord(self, table: str, filename: str, data: dict) -> None:
-        if isFileExists(f"{self.dbDir}/{table}", filename):
-            raise ClientException(f"{table.capitalize()} {filename} already exists.")
-
-        createFile(f"{self.dbDir}/{table}", filename, data)
-
-    def updateRecord(self, table: str, filename: str, data: dict) -> None:
-        if isFileNotExists(f"{self.dbDir}/{table}", filename):
-            raise ClientException(f"{table.capitalize()} {filename} not found.")
-
-        prevData = readFile(f"{self.dbDir}/{table}", filename)
-        updatedData = {**prevData, **data}
-        updateFile(f"{self.dbDir}/{table}", filename, updatedData)
-
-    def deleteRecord(self, table: str, filename: str) -> None:
-        if isFileNotExists(f"{self.dbDir}/{table}", filename):
-            raise ClientException(f"{table.capitalize()} {filename} not found.")
-
-        deleteFile(f"{self.dbDir}/{table}", filename)
-
-    def getRecord(self, table: str, filename: str) -> dict:
-        if isFileNotExists(f"{self.dbDir}/{table}", filename):
-            raise ClientException(f"{table.capitalize()} {filename} not found.")
-
-        data = readFile(f"{self.dbDir}/{table}", filename)
-        return data
-
-    def getAllRecords(self, table: str) -> list:
-        data = readFolder(f"{self.dbDir}/{table}", fileContent=True)
-        return data
